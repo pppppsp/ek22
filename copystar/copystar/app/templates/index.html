@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} О нас {% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .logo img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .logo h1 {
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .carousel-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+  
+
+    .carousel h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .items {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .item {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        overflow: hidden;
+        display: none;
+        max-width: 500px;
+    }
+
+    .item.active {
+        display: block;
+    }
+
+    .image-container {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .motto {
+        flex: 1;
+        text-align: left;
+        margin-left: 40px;
+    }
+
+    .motto h1 {
+        font-size: 24px;
+        margin: 0;
+    }
+</style>
+
+<div class="container">
+    <h2 class="title">О нас</h2>
+    <div class="carousel-container">
+        <div class="carousel">
+            <h3>Наши товары</h3>
+            <div class="items">
+                {% for p in products %}
+                <div class="item">
+                    <div class="product">
+                        <div class="image-container">
+                            <img src="{{ p.image.url }}" alt="Image">
+                        </div>
+                        <div class="product-name">
+                            <h3>{{ p.name }}</h3>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="motto">
+            <h1>CopyStar - здесь важно качество</h1>
+        </div>
+    </div>
+</div>
+
+<script>
+    let num = 0,
+        $items = $('.carousel .item');
+    $($items.get(num)).addClass('active');
+    setInterval(() => {
+        $($items.get(num)).removeClass('active');
+        num = num + 1;
+        if (num >= $items.length) num = 0;
+        $($items.get(num)).addClass('active');
+    }, 3000);
+</script>
+{% endblock %}

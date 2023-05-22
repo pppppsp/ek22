@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+  
+</style>
+
+<h2 class="catalog-heading">Каталог</h2>
+<div class="cont">
+  <div class="left">
+      <div class="sorting-container">
+          <div class="sorting-section">
+              <label>Упорядочить по:</label>
+              <a class="sort-link" href="{% url 'catalog' order='country' filter=filter %}">Стране производителя</a>
+              <a class="sort-link" href="{% url 'catalog' order='name' filter=filter %}">Наименованию</a>
+              <a class="sort-link" href="{% url 'catalog' order='price' filter=filter %}">Цене</a>
+          </div>
+          <div class="filter-section">
+              <label>Фильтровать по:</label>
+              <a class="filter-link" href="{% url 'catalog' order=order filter=0 %}">Показать все</a>
+              {% for c in categories %}
+              <a class="filter-link {% if c.id == filtr %}disabled{% endif %}" href="{% url 'catalog' order=order filter=c.id %}">{{ c.name }}</a>
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+    <div class="product-list">
+        {% for p in products %}
+        <a href="{% url 'product_detail' p.id %}">
+            <div class="product-item">
+                <div class="image">
+                    <img src="{{ p.image.url }}" alt="Product Image">
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">{{ p.name }}</h3>
+                    <h3 class="product-price">Цена: {{ p.price }}</h3>
+                    <h3 class="product-availability">В наличии: {{ p.amount }} шт.</h3>
+                    {% if user.is_authenticated %}
+                    <button class="add-to-cart-btn" data-id="{{ p.id }}">
+                        {% if p.cart %}
+                        В корзине {{ p.cart }} шт.
+                        {% else %}
+                        В корзину
+                        {% endif %}
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.add-to-cart-btn', function(e) {
+        var $obj = $(this);
+        $.get('/cart_add/' + $obj.data('id'), {}, function(res) {
+            $obj.html(res);
+        });
+        e.preventDefault();
+        return false;
+    });
+</script>
+{% endblock %}

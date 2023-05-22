@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Удаление заказа{% endblock %}
+
+{% block content %}
+<style>
+   
+</style>
+
+<h2 class="delete-order-heading">Удаление заказа</h2>
+
+<div class="order-container">
+    <div class="order-details">
+        <div class="order-info">
+            <h3>Дата: {{ order.date_create }}</h3>
+            <h3>Статус: {{ order.status }}</h3>
+            <h3>Количество: {{ order.amount }} шт.</h3>
+        </div>
+        <nav>
+            <a href="{% url 'delete_order_ok' order.id %}" class="delete-order-btn">Удалить заказ</a>
+        </nav>
+    </div>
+
+    <div class="product-container">
+        {% for p in order.products %}
+        <div class="product-card">
+            <img class="product-image" src="{{ p.product.image.url }}" alt="Product Image">
+            <div class="product-info">
+                <h3>Название: {{ p.product.name }}</h3>
+                <h3>Цена: {{ p.product.price }}</h3>
+                <h3>Количество: {{ p.amount }} шт.</h3>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

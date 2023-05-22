@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<style>
+    .cart-heading {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .product-card {
+        display: inline-block;
+        width: 200px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .product-info {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .product-info h3 {
+        margin-bottom: 5px;
+        font-size: 18px;
+    }
+
+    .product-info label {
+        font-weight: bold;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .quantity-control button {
+        width: 30px;
+        height: 30px;
+        background-color: #eee;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 5px;
+    }
+
+    .checkout-btn {
+        background-color: #23527c;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .checkout-btn:hover {
+        background-color: #1a4367;
+    }
+
+    .empty-cart {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    @media screen and (max-width: 767px) {
+        .product-card {
+            width: 100%;
+            margin-right: 0;
+        }
+    }
+</style>
+
+{% if products %}
+    <h2 class="cart-heading">Корзина</h2>
+    <div>
+        {% for p in products %}
+        <div class="product-card">
+            <img class="product-image" src="{{ p.product.image.url }}" alt="Product Image">
+            <div class="product-info">
+                <h3><label>Название:</label> {{ p.product.name }}</h3>
+                <h3><label>Цена:</label> {{ p.product.price }}</h3>
+                <h3><label>В наличии:</label> {{ p.product.amount }} шт.</h3>
+                <div class="quantity-control">
+                    <button class="sub_from_cart" data-id="{{ p.product.id }}">-</button>
+                    <label>в корзине {{ p.amount }} шт</label>
+                    <button class="add_to_cart" data-id="{{ p.product.id }}">+</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <nav>
+        <a href="{% url 'create_order' %}" class="checkout-btn">Оформить заказ</a>
+    </nav>
+{% else %}
+    <h2 class="empty-cart">Нет товаров в корзине</h2>
+{% endif %}
+
+<script>
+    $(document).on('click', '.add_to_cart', e => {
+        $obj = $(e.target);
+        $.get('/cart_add/' + $obj.data('id'), {}, res => {
+            $obj.siblings('label').html(res);
+        });
+        e.preventDefault();
+        return false;
+    });
+
+    $(document).on('click', '.sub_from_cart', e => {
+        $obj = $(e.target);
+        $.get('/cart_sub/' + $obj.data('id'), {}, res => {
+            $obj.siblings('label').html(res);
+        });
+        e.preventDefault();
+        return false;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Главная {% endblock %}
+
+{% block content %}
+<style>
+    
+        *{
+            margin: 0;
+            padding:0;
+        }
+        body ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .helptext ul{
+            background-color: white;
+        }
+
+        li{
+            float:left;
+        }
+
+        li a{
+            display: block;
+            color:white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover{
+            background-color: #111;
+        }
+    .form-container{
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+    }
+
+    .form-container input{
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 5px;
+    }
+
+    .form-container button{
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 5px
+    }
+
+    .form-container button:hover{
+        opacity: 0.8;
+    }
+    
+    ul{
+        color:white;
+    }
+
+</style>
+<div class="form-container">
+<form action="." method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>Войти</button>
+</form>
+</div>
+{% endblock %}

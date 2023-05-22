@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Заказы{% endblock %}
+
+{% block content %}
+<style>
+
+</style>
+
+{% if orders %}
+    <h2 class="orders-heading">Заказы</h2>
+
+    <div>
+        {% for o in orders %}
+        <div class="order-card">
+            <div>
+                <h3><label>Дата:</label> {{ o.date_create }}</h3>
+                <h3><label>Статус:</label> {{ o.status }}{% if o.result %} ({{ o.result }}){% endif %}</h3>
+                <h3><label>Количество:</label> {{ o.amount }} шт.</h3>
+                {% if o.status.id == 1 %}
+                    <nav><a href="{% url 'delete_order' o.id %}">Удалить</a></nav>
+                {% endif %}
+            </div>
+            {% for p in o.products %}
+                <div class="product_item">
+                    <img src="{{ p.product.image.url }}" alt="Product Image">
+                    <div class="product-info1">
+                        <h3><label>Название:</label> {{ p.product.name }}</h3>
+                        <h3><label>Цена:</label> {{ p.product.price }}</h3>
+                        <h3><label>Количество:</label> {{ p.amount }} из {{ p.product.amount }} шт.</h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <h2>Нет заказов</h2>
+{% endif %}
+
+{% endblock %}

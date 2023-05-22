@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Описание продукта{% endblock %}
+
+{% block content %}
+<style>
+
+</style>
+
+<h2>Описание продукта</h2>
+<div class="product-card">
+    <img class="product-image" src="{{ product.image.url }}" alt="Product Image">
+    <div class="product-info">
+        <h2>Название продукта: {{ product.name }}</h2>
+        <div class="product-details">
+            <h3><label>Производитель:</label> {{ product.country }}</h3>
+            <h3><label>Модель:</label> {{ product.model }}</h3>
+            <h3><label>Категория:</label> {{ product.category }}</h3>
+            <h3><label>Цена:</label> {{ product.price }}</h3>
+            <h3><label>В наличии:</label> {{ product.amount }} шт.</h3>
+        </div>
+        {% if user.is_authenticated %}
+        <button class="add-to-cart-btn" data-id="{{ product.id }}">
+            {% if product.cart %}
+            В корзине {{ product.cart }} шт.
+            {% else %}
+            В корзину
+            {% endif %}
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.add-to-cart-btn', e => {
+        $obj = $(e.currentTarget);
+        $.get('/cart_add/' + $obj.data('id'), {}, res => {
+            $obj.html(res);
+        });
+        e.preventDefault();
+        return false;
+    });
+</script>
+{% endblock %}
